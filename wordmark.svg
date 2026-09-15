@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 946 379" width="100%">
+<rect x="0" y="0" width="946" height="379" rx="10" fill="#0d1117"/>
+<rect x="0.5" y="0.5" width="945" height="378" rx="10" fill="none" stroke="#30363d"/>
+<text x="20" y="24" font-family="Consolas,Menlo,monospace" font-size="10" fill="#30363d">siddharthkmaharana@github ~ $ ./whoami.sh</text>
+
+<style>
+  #rockGroup {
+    transform-box: fill-box;
+    transform-origin: 50% 50%;
+  }
+  .wordmark-text {
+    font-family: 'Consolas','SF Mono','Menlo',monospace;
+    font-weight: 800;
+    font-size: 150px;
+    letter-spacing: 2px;
+  }
+</style>
+
+<g id="rockGroup">
+<animateTransform attributeName="transform" type="rotate" values="-10 473.2 199.7; 10 473.2 199.7; -10 473.2 199.7" keyTimes="0;0.5;1" dur="4.2s" calcMode="spline" keySplines="0.45 0 0.55 1;0.45 0 0.55 1" repeatCount="indefinite"/>
+<text class="wordmark-text" x="61.2" y="267.1" fill="#0d1117">SIDDHARTH</text>
+<text class="wordmark-text" x="59.7" y="265.0" fill="#1c2127">SIDDHARTH</text>
+<text class="wordmark-text" x="58.1" y="262.9" fill="#2c3036">SIDDHARTH</text>
+<text class="wordmark-text" x="56.6" y="260.8" fill="#3c4046">SIDDHARTH</text>
+<text class="wordmark-text" x="55.1" y="258.7" fill="#4b5055">SIDDHARTH</text>
+<text class="wordmark-text" x="53.6" y="256.6" fill="#5a5f65">SIDDHARTH</text>
+<text class="wordmark-text" x="52.1" y="254.5" fill="#6a6f74">SIDDHARTH</text>
+<text class="wordmark-text" x="50.6" y="252.4" fill="#7a7e84">SIDDHARTH</text>
+<text class="wordmark-text" x="49.1" y="250.3" fill="#898e94">SIDDHARTH</text>
+<text class="wordmark-text" x="47.6" y="248.2" fill="#989ea3">SIDDHARTH</text>
+<text class="wordmark-text" x="46.0" y="246.1" fill="#a8adb3">SIDDHARTH</text>
+<text class="wordmark-text" x="44.5" y="244.0" fill="#b8bdc2">SIDDHARTH</text>
+<text class="wordmark-text" x="43.0" y="241.9" fill="#c7cdd2">SIDDHARTH</text>
+<text class="wordmark-text" x="41.5" y="239.8" fill="#d6dce1">SIDDHARTH</text>
+<text class="wordmark-text" x="40.0" y="237.7" fill="#e6ecf1">SIDDHARTH</text>
+</g>
+</svg>

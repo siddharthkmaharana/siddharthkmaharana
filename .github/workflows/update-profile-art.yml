@@ -1,0 +1,35 @@
+name: Update profile art
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # every day at 02:00 UTC
+  workflow_dispatch: {}     # allows manual "Run workflow" button
+
+permissions:
+  contents: write
+
+jobs:
+  update-heatmap:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Regenerate contribution heatmap
+        run: python scripts/generate_streak_svg.py siddharthkmaharana contrib-heatmap.svg
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add contrib-heatmap.svg
+          git diff --staged --quiet || git commit -m "chore: refresh contribution heatmap"
+          git push
