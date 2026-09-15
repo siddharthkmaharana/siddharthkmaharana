@@ -12,12 +12,15 @@
 <br>
 <br>
 
-<!-- animated contribution graph: real data, boxes pop in and flash once
-     (regenerated daily by .github/workflows/update-profile-art.yml) -->
+<!-- animated contribution snake: eats real GitHub commits, auto-refreshed daily via snake.yml -->
 
-<h3><code>siddharthkmaharana@github ~ $ ./contributions.sh</code></h3>
+<h3><code>siddharthkmaharana@github ~ $ ./snake.sh</code></h3>
 
-<img src="./contrib-heatmap.svg" width="860" alt="GitHub contribution graph — auto-refreshed daily" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/output/github-contribution-grid-snake.svg">
+  <img alt="GitHub Contribution Snake" src="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/output/github-contribution-grid-snake-dark.svg" width="860" />
+</picture>
 
 <br>
 <br>
