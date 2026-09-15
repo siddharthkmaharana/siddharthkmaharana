@@ -30,6 +30,7 @@
 <p><b>MCA Student · Full Stack Developer · AI Builder</b></p>
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-siddharth--kumar--maharana-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/siddharth-kumar-maharana-a59a72337/)
+[![LeetCode](https://img.shields.io/badge/LeetCode-siddharthkmleetcode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black)](https://leetcode.com/u/siddharthkmleetcode/)
 [![X](https://img.shields.io/badge/X-Siddharth__km2-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/Siddharth_km2)
 [![Instagram](https://img.shields.io/badge/Instagram-siddharth.kumar.maharana-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://instagram.com/siddharth.kumar.maharana)
 [![Email](https://img.shields.io/badge/Email-siddharthk.maharana%40gmail.com-8B5CF6?style=for-the-badge&logo=gmail&logoColor=white)](mailto:siddharthk.maharana@gmail.com)
