@@ -5,7 +5,10 @@
 -->
 <div align="center">
 
-<img src="./profile-card.svg" width="860" alt="Siddharth Kumar Maharana — Profile" />
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="./dark_mode.svg">
+  <img alt="Siddharth Kumar Maharana's Profile" src="./light_mode.svg">
+</picture>
 
 <br>
 <br>
