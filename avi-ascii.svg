@@ -1,6 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 470 389" width="100%">
 <rect x="0" y="0" width="470" height="389" rx="10" fill="#0d1117"/>
-<rect x="0.5" y="0.5" width="469" height="388" rx="10" fill="none" stroke="#30363d"/>
 <text x="14" y="24" font-family="Consolas,Menlo,monospace" font-size="10" fill="#30363d">siddharthkmaharana@github ~ $ ./portrait.sh</text>
 
 <style>

@@ -5,12 +5,7 @@
 -->
 <div align="center">
 
-<table>
-<tr>
-<td valign="top"><img src="./avi-ascii.svg" width="395" alt="Siddharth Kumar Maharana — ASCII portrait" /></td>
-<td valign="top"><img src="./info-card.svg" width="428" alt="Siddharth Kumar Maharana — Terminal Info Card" /></td>
-</tr>
-</table>
+<img src="./profile-card.svg" width="860" alt="Siddharth Kumar Maharana — Profile" />
 
 <br>
 <br>
