@@ -54,15 +54,12 @@ def build_card(out_path="info-card.svg"):
         ("kv", "Education.Master", "MCA @ Amity Univ | CGPA: 8.5", "highlight"),
         ("kv", "Education.Grad", "B.Sc Physics @ Berhampur Univ (7.5)")
     ]
+    import html
 
     svg = []
-    svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" font-family="ConsolasFallback,Consolas,\'SF Mono\',\'Roboto Mono\',Menlo,monospace" font-size="{font_size}px">')
+    svg.append('<?xml version="1.0" encoding="UTF-8"?>')
+    svg.append(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="100%" font-family="Consolas, \'SF Mono\', \'Roboto Mono\', Menlo, monospace" font-size="{font_size}px">')
     svg.append('''<style>
-  @font-face {
-    src: local('Consolas'), local('Consolas Bold');
-    font-family: 'ConsolasFallback';
-    font-display: swap;
-  }
   .bg { fill: #0d1117; }
   .border { stroke: #30363d; fill: none; }
   .user { fill: #79c0ff; font-weight: bold; }
@@ -87,24 +84,26 @@ def build_card(out_path="info-card.svg"):
             y += 4.5
             continue
         elif kind == "header":
-            title = item[1]
-            dashes = "-" * max(4, total_chars - len(title) - 1)
+            raw_title = item[1]
+            title = html.escape(raw_title)
+            dashes = "-" * max(4, total_chars - len(raw_title) - 1)
             svg.append(f'<text x="{start_x}" y="{y:.1f}"><tspan class="user">{title}</tspan> <tspan class="dash">{dashes}</tspan></text>')
         elif kind == "section":
-            title = f"- {item[1]} "
-            dashes = "-" * max(4, total_chars - len(title))
+            raw_title = item[1]
+            title = f"- {html.escape(raw_title)} "
+            dashes = "-" * max(4, total_chars - (len(raw_title) + 3))
             svg.append(f'<text x="{start_x}" y="{y:.1f}"><tspan class="sec">{title}</tspan><tspan class="dash">{dashes}</tspan></text>')
         elif kind == "kv":
             k = item[1]
-            v = item[2]
+            v = html.escape(item[2])
             v_cls = item[3] if len(item) > 3 and item[3] else "val"
             
             # Format key (handle dotted keys like Languages.Code)
             if "." in k:
                 parts = k.split(".", 1)
-                k_markup = f'<tspan class="key">{parts[0]}</tspan>.<tspan class="key">{parts[1]}</tspan>'
+                k_markup = f'<tspan class="key">{html.escape(parts[0])}</tspan>.<tspan class="key">{html.escape(parts[1])}</tspan>'
             else:
-                k_markup = f'<tspan class="key">{k}</tspan>'
+                k_markup = f'<tspan class="key">{html.escape(k)}</tspan>'
             
             prefix = ". "
             used = len(prefix) + len(k) + 1  # 1 for ":"
