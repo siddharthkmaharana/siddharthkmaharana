@@ -7,7 +7,12 @@
 
 <h3><code>siddharthkmaharana@github ~ $ whoami</code></h3>
 
-<img src="./avi-ascii.svg" width="470" alt="Siddharth Kumar Maharana — ASCII portrait" />
+<table>
+<tr>
+<td valign="top"><img src="./avi-ascii.svg" width="395" alt="Siddharth Kumar Maharana — ASCII portrait" /></td>
+<td valign="top"><img src="./info-card.svg" width="428" alt="Siddharth Kumar Maharana — Terminal Info Card" /></td>
+</tr>
+</table>
 
 <br>
 <br>
