@@ -5,8 +5,6 @@
 -->
 <div align="center">
 
-<h3><code>siddharthkmaharana@github ~ $ whoami</code></h3>
-
 <table>
 <tr>
 <td valign="top"><img src="./avi-ascii.svg" width="395" alt="Siddharth Kumar Maharana — ASCII portrait" /></td>
@@ -18,8 +16,6 @@
 <br>
 
 <!-- animated contribution snake: eats real GitHub commits, auto-refreshed daily via snake.yml -->
-
-<h3><code>siddharthkmaharana@github ~ $ ./snake.sh</code></h3>
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/output/github-contribution-grid-snake-dark.svg">
