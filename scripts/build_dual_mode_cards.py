@@ -3,49 +3,50 @@
 build_dual_mode_cards.py
 
 Builds dark_mode.svg and light_mode.svg with pixel-perfect alignment,
-matching Andrew6rant's layout down to the character, combined with the
-dynamic row-by-row typing animation for Siddharth's ASCII portrait:
-
-- Left: Siddharth's ASCII portrait (25 rows x 37 cols), animating row-by-row
-  with left-to-right typing revealing the face dynamically, frozen at completion.
+matching Andrew6rant's layout down to the character:
+- Left: Siddharth's full ASCII portrait (all 25 rows x 37 cols from head/hair
+  down to neck/shoulders, fully scaled - not cropped or half-faced), with
+  smooth SMIL row-by-row typing animation.
 - Right: System neofetch card where EVERY single row is flush-right aligned
-  at exactly column 58 (no overflow, no clipping, straight vertical margins on both sides).
+  at exactly column 60, with section breathing gaps at y=290 and y=430
+  matching Andrew6rant's exact vertical rhythm.
 """
 
 import html
 
-# 25 rows of Siddharth's ASCII portrait, trimmed & centered to 37 chars
+# Full 25-row resampled portrait of Siddharth (complete head, hair, glasses, face, shoulders)
 ASCII_25_ROWS = [
-    "        ....      ..:.. .::::-+**+==+",
-    "    .  ....  .. . .-+**+++*##%%@@%%%@",
-    "    . ........:::::=#%%#%%%@@@@%@@@@%",
-    "     .....::::-----=##%%%%%%%%%%%%%%@",
-    "     ....::::----=*#%%%%%%%%@@@@@@@@%",
-    "     ....::::---+#%%%%####****####%%@",
-    "      .  .:::--=######**+==-=+++==+++",
-    "      -::....::-====-====--+******##+",
-    "     +#%%##*=::-+*******+=:***#%##%#+",
-    "     ##%@%%%%+-=*#########++%%%%%@%+=",
-    "     #*%%%#*##+=*#####%%%@%*#%%%%%*+%",
-    "     =##%%%*#%*=+###%%%%%%@@%#####*%%",
-    "      -#%%##*##*==+*#%%%@@%@@@@%@@#%%",
-    "        *#%%%%**+=+++*%%%%@@@%%%%%#**",
-    "          +#%#=+*=+++**#%%%%#+***#**#",
-    "            :=*++++++**###%%*#**##%%%",
-    "             +**==++****#*#%%@@%%%%%@",
-    "             +*#*=-=*******#%%%@@%%%%",
-    "             +*###+--++++***%@@%%%%%%",
-    "            -+*#%%%*=:-::-:-=*#%@@@@@",
-    "         -..+**#%%%%%#+=-::. .:-+*%%%",
-    "        =*+-=*#%%%%%%%%%##*++=--:--:-",
-    "     :-==:-*#*+#%%%%%@%@%%%%####%#:. ",
-    "  :--::::-+--**+*%@@@%@@@@%%%%#%@+ ..",
-    "::::::...::--=*%*=*#%@@@@@@@@%%%%:  ."
+    "              -=:--:-::-:-:.         ",
+    "          .......  .... .:.:-:..     ",
+    "         ::.    ..  .   ...:..:-     ",
+    "        ..      .....   .:..:..=+=   ",
+    "             . .    ....    ...:=+-. ",
+    "         .   .  :.  ..  .   .:: .--- ",
+    "         ...    .-:.---+#*++##*==*#*:",
+    "      . .....::.-*#*#%%@%@@@@@@%#%%= ",
+    "       ...:::---=#%%%%%%%%%%@@%%%#%  ",
+    "       ...::--=+#%%%%#%%%%@@%%@%#+   ",
+    "        . ::--*####*+==+*+**#%*++*--:",
+    "       .--::::======-=****#*-++#*+ .:",
+    "       *%%%#=-+******=##%%%+*%#%%* . ",
+    "       ##%#*#++###%%@##%%%#*%%@%##-  ",
+    "       -#%%*#*+*#%%%%@%%#%*%%@%%%%   ",
+    "        :#%%#*+=+*%%%@@%%%######*%   ",
+    "          -##=*=++*#%%#+*******#--   ",
+    "            -*+++**##%#%##%%%%%#*:   ",
+    "            -**==****#%%@%%%%@@%:    ",
+    "            -*##=-+++*#@%%%%%%%#     ",
+    "          ..+*%%#*=-:::=+#%%%%%+     ",
+    "         =+-+#%%%%%#*+=---=---:      ",
+    "     ..:---+*+#%%%%@%%###%:.         ",
+    "    .:::..--=***%%@@@@@%%# ...       ",
+    "  :-::::::.-==#+-+%@@@@%@#. ..-:     ",
 ]
 
-TOTAL_LEN = 58
+TOTAL_LEN = 60
 STAGGER = 0.22      # Delay between each row starting to type (seconds)
 ROW_DUR = 0.022     # Seconds per character typed in a row
+ASCII_X = 20        # Left padding for ASCII art (centers the portrait in left half)
 
 def format_kv_line(k, v):
     prefix = ". "
@@ -61,6 +62,16 @@ def format_kv_line(k, v):
     v_escaped = html.escape(v)
     return f'<tspan class="cc">{prefix}</tspan>{k_markup}<tspan class="cc">{dots}</tspan><tspan class="value">{v_escaped}</tspan>'
 
+def make_solid_rule(title, prefix="", suffix=""):
+    """Creates a continuous solid divider line using Unicode em-dashes like Andrew6rant"""
+    label = f"{prefix}{title}{suffix}"
+    needed = TOTAL_LEN - len(label)
+    if needed <= 0:
+        return label
+    # Standard Andrew rule format: '-————————————————————————————-—-'
+    dashes = "-" + "—" * (needed - 4) + "-—-"
+    return f"{label}{dashes}"
+
 def make_svg(mode="dark"):
     is_dark = (mode == "dark")
 
@@ -75,7 +86,7 @@ def make_svg(mode="dark"):
     # Left side: 25 rows animated row-by-row via SMIL clip-paths
     defs = ["<defs>"]
     ascii_elements = []
-    max_w = 365.0  # covers full 37-column width in 16px Consolas (~356px)
+    max_w = 360.0  # covers full 37-column width in 16px Consolas
 
     for i, row in enumerate(ASCII_25_ROWS):
         y = 30 + i * 20
@@ -88,7 +99,7 @@ def make_svg(mode="dark"):
 
         defs.append(
             f'  <clipPath id="{clip_id}">\n'
-            f'    <rect x="15" y="{clip_y}" width="0" height="20">\n'
+            f'    <rect x="{ASCII_X}" y="{clip_y}" width="0" height="20">\n'
             f'      <animate attributeName="width" from="0" to="{max_w:.1f}" '
             f'begin="{begin:.2f}s" dur="{dur:.2f}s" fill="freeze" '
             f'calcMode="spline" keySplines="0.25 0 0.3 1" keyTimes="0;1"/>\n'
@@ -98,69 +109,60 @@ def make_svg(mode="dark"):
 
         row_esc = html.escape(row)
         ascii_elements.append(
-            f'  <text x="15" y="{y}" clip-path="url(#{clip_id})">{row_esc}</text>'
+            f'  <text x="{ASCII_X}" y="{y}" clip-path="url(#{clip_id})">{row_esc}</text>'
         )
 
     defs.append("</defs>")
     defs_str = "\n".join(defs)
     ascii_elements_str = "\n".join(ascii_elements)
 
-    # Right side: 25 rows, each ending flush-right at column 58
-    dashes_head = "-" * (TOTAL_LEN - len("siddharth@maharana") - 1)
-    dashes_contact = "-" * (TOTAL_LEN - len("- Contact "))
-    dashes_stats = "-" * (TOTAL_LEN - len("- GitHub Stats "))
+    # Right side: 23 active rows with empty gaps at y=290 and y=430, all exactly 60 chars
+    head_rule = make_solid_rule("siddharth@maharana", suffix=" ")
+    contact_rule = make_solid_rule("Contact", prefix="- ", suffix=" ")
+    stats_rule = make_solid_rule("GitHub Stats", prefix="- ", suffix=" ")
+
+    # Calculate dots for stats rows to hit exactly TOTAL_LEN (60)
+    # Repos row
+    repos_part = ". Repos: .... 19 {Contributed: 10+} | Stars:"
+    repos_dots_count = TOTAL_LEN - len(repos_part) - len(" 4")
+    repos_dots = " " + "." * (repos_dots_count - 2) + " "
+
+    # Commits row
+    commits_part = ". Commits: ................. 461 | Followers:"
+    commits_dots_count = TOTAL_LEN - len(commits_part) - len(" 5")
+    commits_dots = " " + "." * (commits_dots_count - 2) + " "
 
     info_lines = [
-        # y=30
-        (30, f'<tspan x="390" y="30">siddharth@maharana</tspan> {dashes_head}'),
-        # y=50
+        # System Info block (y=30 to y=130)
+        (30, f'<tspan x="390" y="30">{head_rule[:len("siddharth@maharana")]}</tspan> {head_rule[len("siddharth@maharana")+1:]}'),
         (50, f'<tspan x="390" y="50">{format_kv_line("OS", "Windows 11, Linux, Android")}</tspan>'),
-        # y=70
         (70, f'<tspan x="390" y="70">{format_kv_line("Uptime", "23 years, MCA Student")}</tspan>'),
-        # y=90
         (90, f'<tspan x="390" y="90">{format_kv_line("Host", "Amity University, Bengaluru")}</tspan>'),
-        # y=110
         (110, f'<tspan x="390" y="110">{format_kv_line("Kernel", "Full Stack & AI Developer")}</tspan>'),
-        # y=130
         (130, f'<tspan x="390" y="130">{format_kv_line("IDE", "VS Code, Cursor, Postman")}</tspan>'),
-        # y=150
         (150, '<tspan x="390" y="150" class="cc">. </tspan>'),
-        # y=170
+        # Languages block (y=170 to y=210)
         (170, f'<tspan x="390" y="170">{format_kv_line("Languages.Programming", "TypeScript, Python, JS, C")}</tspan>'),
-        # y=190
         (190, f'<tspan x="390" y="190">{format_kv_line("Languages.Web", "React, Node, Express, FastAPI")}</tspan>'),
-        # y=210
         (210, f'<tspan x="390" y="210">{format_kv_line("Languages.Data", "MongoDB, Postgres, SQL, Docker")}</tspan>'),
-        # y=230
         (230, '<tspan x="390" y="230" class="cc">. </tspan>'),
-        # y=250
+        # Hobbies block (y=250 to y=270)
         (250, f'<tspan x="390" y="250">{format_kv_line("Hobbies.Software", "AI Agents, Automation, Bots")}</tspan>'),
-        # y=270
         (270, f'<tspan x="390" y="270">{format_kv_line("Projects.Featured", "CORTEXA, Telemedicine EHR")}</tspan>'),
-        # y=290
-        (290, f'<tspan x="390" y="290">{format_kv_line("Certifications", "Oracle OCI 2025, Google Cert")}</tspan>'),
-        # y=310
-        (310, f'<tspan x="390" y="310">- Contact</tspan> {dashes_contact}'),
-        # y=330
+        # y=290 is an EMPTY gap (creates clean breathing room above Contact, matching Andrew6rant)
+        # Contact block (y=310 to y=410)
+        (310, f'<tspan x="390" y="310">{contact_rule[:len("- Contact")]}</tspan> {contact_rule[len("- Contact")+1:]}'),
         (330, f'<tspan x="390" y="330">{format_kv_line("Email.Personal", "siddharthk.maharana@gmail.com")}</tspan>'),
-        # y=350
         (350, f'<tspan x="390" y="350">{format_kv_line("LinkedIn", "siddharth-kumar-maharana")}</tspan>'),
-        # y=370
         (370, f'<tspan x="390" y="370">{format_kv_line("LeetCode", "siddharthkmleetcode")}</tspan>'),
-        # y=390
         (390, f'<tspan x="390" y="390">{format_kv_line("Location", "Bengaluru, Karnataka, India")}</tspan>'),
-        # y=410
         (410, f'<tspan x="390" y="410">{format_kv_line("Education", "MCA (Amity) | B.Sc Physics")}</tspan>'),
-        # y=430
-        (430, '<tspan x="390" y="430" class="cc">. </tspan>'),
-        # y=450
-        (450, f'<tspan x="390" y="450">- GitHub Stats</tspan> {dashes_stats}'),
-        # y=470
-        (470, '<tspan x="390" y="470" class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc"> .... </tspan><tspan class="value">19</tspan> {<tspan class="key">Contributed</tspan>: <tspan class="value">10+</tspan>} | <tspan class="key">Stars</tspan>:<tspan class="cc"> ........... </tspan><tspan class="value">4</tspan>'),
-        # y=490
-        (490, '<tspan x="390" y="490" class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc"> ................. </tspan><tspan class="value">461</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc"> .......... </tspan><tspan class="value">5</tspan>'),
-        # y=510
-        (510, '<tspan x="390" y="510" class="cc">. </tspan><tspan class="key">Lines of Code on GitHub</tspan>:<tspan class="cc"> </tspan><tspan class="value">185,420</tspan> ( <tspan class="addColor">165,240++</tspan>, <tspan class="delColor">20,180--</tspan> )')
+        # y=430 is an EMPTY gap (creates clean breathing room above GitHub Stats, matching Andrew6rant)
+        # GitHub Stats block (y=450 to y=510)
+        (450, f'<tspan x="390" y="450">{stats_rule[:len("- GitHub Stats")]}</tspan> {stats_rule[len("- GitHub Stats")+1:]}'),
+        (470, f'<tspan x="390" y="470"><tspan class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc"> .... </tspan><tspan class="value">19</tspan> {{<tspan class="key">Contributed</tspan>: <tspan class="value">10+</tspan>}} | <tspan class="key">Stars</tspan>:<tspan class="cc">{repos_dots}</tspan><tspan class="value">4</tspan></tspan>'),
+        (490, f'<tspan x="390" y="490"><tspan class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc"> ................. </tspan><tspan class="value">461</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc">{commits_dots}</tspan><tspan class="value">5</tspan></tspan>'),
+        (510, f'<tspan x="390" y="510"><tspan class="cc">. </tspan><tspan class="key">Lines of Code on GitHub</tspan>:<tspan class="cc">. </tspan><tspan class="value">185,420</tspan> ( <tspan class="addColor">165,240++</tspan>,  <tspan class="delColor">20,180--</tspan> )</tspan>')
     ]
 
     info_tspans_str = "\n".join(line[1] for line in info_lines)
