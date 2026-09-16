@@ -3,8 +3,11 @@
 build_dual_mode_cards.py
 
 Builds dark_mode.svg and light_mode.svg with pixel-perfect alignment,
-matching Andrew6rant's layout down to the character:
-- Left: Siddharth's ASCII portrait (25 rows x 37 cols, perfectly scaled and centered).
+matching Andrew6rant's layout down to the character, combined with the
+dynamic row-by-row typing animation for Siddharth's ASCII portrait:
+
+- Left: Siddharth's ASCII portrait (25 rows x 37 cols), animating row-by-row
+  with left-to-right typing revealing the face dynamically, frozen at completion.
 - Right: System neofetch card where EVERY single row is flush-right aligned
   at exactly column 58 (no overflow, no clipping, straight vertical margins on both sides).
 """
@@ -41,6 +44,8 @@ ASCII_25_ROWS = [
 ]
 
 TOTAL_LEN = 58
+STAGGER = 0.22      # Delay between each row starting to type (seconds)
+ROW_DUR = 0.022     # Seconds per character typed in a row
 
 def format_kv_line(k, v):
     prefix = ". "
@@ -67,13 +72,38 @@ def make_svg(mode="dark"):
     del_color = "#f85149" if is_dark else "#cf222e"
     cc_color = "#616e7f" if is_dark else "#c2cfde"
 
-    # Left side: 25 rows for ASCII art at y = 30, 50, ..., 510 (step 20)
-    ascii_tspans = []
+    # Left side: 25 rows animated row-by-row via SMIL clip-paths
+    defs = ["<defs>"]
+    ascii_elements = []
+    max_w = 365.0  # covers full 37-column width in 16px Consolas (~356px)
+
     for i, row in enumerate(ASCII_25_ROWS):
         y = 30 + i * 20
-        row_padded = row.ljust(37)
-        row_esc = html.escape(row_padded)
-        ascii_tspans.append(f'<tspan x="15" y="{y}">{row_esc}</tspan>')
+        clip_y = y - 16
+        clip_id = f"face-clip-{mode}-{i}"
+        
+        row_len = max(1, len(row.rstrip()))
+        dur = max(0.18, ROW_DUR * row_len)
+        begin = STAGGER * i
+
+        defs.append(
+            f'  <clipPath id="{clip_id}">\n'
+            f'    <rect x="15" y="{clip_y}" width="0" height="20">\n'
+            f'      <animate attributeName="width" from="0" to="{max_w:.1f}" '
+            f'begin="{begin:.2f}s" dur="{dur:.2f}s" fill="freeze" '
+            f'calcMode="spline" keySplines="0.25 0 0.3 1" keyTimes="0;1"/>\n'
+            f'    </rect>\n'
+            f'  </clipPath>'
+        )
+
+        row_esc = html.escape(row)
+        ascii_elements.append(
+            f'  <text x="15" y="{y}" clip-path="url(#{clip_id})">{row_esc}</text>'
+        )
+
+    defs.append("</defs>")
+    defs_str = "\n".join(defs)
+    ascii_elements_str = "\n".join(ascii_elements)
 
     # Right side: 25 rows, each ending flush-right at column 58
     dashes_head = "-" * (TOTAL_LEN - len("siddharth@maharana") - 1)
@@ -134,7 +164,6 @@ def make_svg(mode="dark"):
     ]
 
     info_tspans_str = "\n".join(line[1] for line in info_lines)
-    ascii_tspans_str = "\n".join(ascii_tspans)
 
     svg = f"""<?xml version='1.0' encoding='UTF-8'?>
 <svg xmlns="http://www.w3.org/2000/svg" font-family="ConsolasFallback,Consolas,monospace" width="985px" height="530px" font-size="16px">
@@ -154,9 +183,10 @@ size-adjust: 109%;
 text, tspan {{white-space: pre;}}
 </style>
 <rect width="985px" height="530px" fill="{bg_color}" rx="15"/>
-<text x="15" y="30" fill="{text_color}" class="ascii">
-{ascii_tspans_str}
-</text>
+{defs_str}
+<g class="ascii" fill="{text_color}">
+{ascii_elements_str}
+</g>
 <text x="390" y="30" fill="{text_color}">
 {info_tspans_str}
 </text>
