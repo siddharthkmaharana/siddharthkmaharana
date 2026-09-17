@@ -148,7 +148,7 @@ def make_svg(mode="dark"):
         (230, '<tspan x="390" y="230" class="cc">. </tspan>'),
         # Hobbies block (y=250 to y=270)
         (250, f'<tspan x="390" y="250">{format_kv_line("Hobbies.Software", "AI Agents, Automation, Bots")}</tspan>'),
-        (270, f'<tspan x="390" y="270">{format_kv_line("Projects.Featured", "CORTEXA, Telemedicine EHR")}</tspan>'),
+        (270, f'<tspan x="390" y="270">{format_kv_line("Projects.Featured", "CORTEXA, Merkle-Tree-Visualizer")}</tspan>'),
         # y=290 is an EMPTY gap (creates clean breathing room above Contact, matching Andrew6rant)
         # Contact block (y=310 to y=410)
         (310, f'<tspan x="390" y="310">{contact_rule[:len("- Contact")]}</tspan> {contact_rule[len("- Contact")+1:]}'),

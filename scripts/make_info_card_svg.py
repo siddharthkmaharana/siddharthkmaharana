@@ -37,7 +37,7 @@ def build_card(out_path="info-card.svg"):
         ("section", "Experience & Projects", ""),
         ("kv", "Work.Intern", "Web Dev Intern @ Infotact Solutions"),
         ("kv", "Projects.AI", "CORTEXA (AI Desktop Assistant)"),
-        ("kv", "Projects.Web", "Telemedicine EHR, Food Delivery App"),
+        ("kv", "Projects.Web", "Merkle-Tree-Visualizer, Food Delivery App"),
         ("kv", "Research", "Amity Nexus 2026 (Data Integrity)"),
         ("kv", "Certifications", "Oracle OCI 2025, Google Analytics"),
         
