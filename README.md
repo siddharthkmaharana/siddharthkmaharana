@@ -10,9 +10,6 @@
   <img alt="Siddharth Kumar Maharana's Profile" src="./light_mode.svg">
 </picture>
 
-<br>
-<br>
-
 <!-- animated contribution snake: eats real GitHub commits, auto-refreshed daily via snake.yml -->
 
 <picture>
@@ -22,9 +19,6 @@
 </picture>
 
 <br>
-<br>
-
-<h3><code>siddharthkmaharana@github ~ $ ./links.sh</code></h3>
 
 <p><b>MCA Student · Full Stack Developer · AI Builder</b></p>
 
