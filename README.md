@@ -20,7 +20,7 @@
 
 <br>
 
-<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=28&duration=3000&pause=1000&color=8A2BE2&center=true&vCenter=true&width=900&lines=Full+Stack+Developer;AI+%26+ML+Enthusiast;React+%7C+Node.js+%7C+FastAPI;Building+Scalable+Software+Solutions;Open+Source+Contributor;Always+Learning+New+Technologies" alt="Typing SVG" />
+<img src="https://readme-typing-svg.demolab.com?font=Poppins&weight=600&size=10&duration=3000&pause=1000&color=a5d6ff&center=true&vCenter=true&width=900&lines=Full+Stack+Developer;AI+%26+ML+Enthusiast;React+%7C+Node.js+%7C+FastAPI;Building+Scalable+Software+Solutions;Open+Source+Contributor;Always+Learning+New+Technologies" alt="Typing SVG" />
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-siddharth--kumar--maharana-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/siddharth-kumar-maharana-a59a72337/)
 [![LeetCode](https://img.shields.io/badge/LeetCode-siddharthkmleetcode-FFA116?style=for-the-badge&logo=leetcode&logoColor=black)](https://leetcode.com/u/siddharthkmleetcode/)
