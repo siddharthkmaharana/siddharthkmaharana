@@ -12,11 +12,16 @@ matching Andrew6rant's layout down to the character:
   matching Andrew6rant's exact vertical rhythm.
 - GitHub Stats: Dynamically synced (Repos, Streak replacing Stars, Commits,
   Followers, Lines of Code) fetched via fetch_github_stats.py with caching.
+- Cache Busting: Automatically updates README.md with a fresh cache-buster
+  timestamp on every run so GitHub's CDN proxy and browsers never serve
+  stale cached SVGs.
 """
 
 import os
 import sys
+import re
 import html
+import datetime
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(SCRIPT_DIR)
@@ -251,6 +256,38 @@ text, tspan {{white-space: pre;}}
 
     return svg
 
+def update_readme_cache_buster():
+    """
+    Updates README.md with a fresh cache-busting timestamp on the raw image URLs
+    so that GitHub's CDN and web browsers immediately display the newly generated SVGs.
+    """
+    readme_path = os.path.join(REPO_ROOT, "README.md")
+    if not os.path.exists(readme_path):
+        return
+    with open(readme_path, "r", encoding="utf-8") as f:
+        content = f.read()
+
+    ts = int(datetime.datetime.now(datetime.timezone.utc).timestamp())
+    
+    # Standardize the picture block to use raw.githubusercontent.com URLs with ?v=<timestamp>
+    dark_url = f"https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/dark_mode.svg?v={ts}"
+    light_url = f"https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/light_mode.svg?v={ts}"
+
+    pattern = r'<picture>\s*<source media="\(prefers-color-scheme: dark\)" srcset="[^"]+">\s*(?:<source media="\(prefers-color-scheme: light\)" srcset="[^"]+">\s*)?<img alt="Siddharth Kumar Maharana\'s Profile" src="[^"]*"[^>]*>\s*</picture>'
+    replacement = (
+        f'<picture>\n'
+        f'  <source media="(prefers-color-scheme: dark)" srcset="{dark_url}">\n'
+        f'  <source media="(prefers-color-scheme: light)" srcset="{light_url}">\n'
+        f'  <img alt="Siddharth Kumar Maharana\'s Profile" src="{dark_url}" />\n'
+        f'</picture>'
+    )
+
+    new_content = re.sub(pattern, replacement, content, count=1)
+    if new_content != content:
+        with open(readme_path, "w", encoding="utf-8") as f:
+            f.write(new_content)
+        print(f"[build_dual_mode_cards] Updated README.md with cache buster ?v={ts}")
+
 def run():
     stats = get_live_stats("siddharthkmaharana")
     print(f"[build_dual_mode_cards] Generating cards with stats: Repos={stats.get('repos')}, Streak={stats.get('streak')}, Commits={stats.get('commits')}, Followers={stats.get('followers')}")
@@ -266,6 +303,8 @@ def run():
     with open(light_path, "w", encoding="utf-8") as f:
         f.write(light_svg)
     print(f"Wrote {light_path}")
+
+    update_readme_cache_buster()
 
 if __name__ == "__main__":
     run()

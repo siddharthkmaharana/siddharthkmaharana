@@ -2,8 +2,14 @@ name: Update profile art
 
 on:
   schedule:
-    - cron: "0 2 * * *"   # every day at 02:00 UTC
+    - cron: "0 */6 * * *"   # syncs every 6 hours (and at midnight/daily)
   workflow_dispatch: {}     # allows manual "Run workflow" button
+  push:
+    branches:
+      - main
+    paths:
+      - 'scripts/**'
+      - '.github/workflows/update-profile-art.yml'
 
 permissions:
   contents: write
@@ -35,6 +41,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add dark_mode.svg light_mode.svg contrib-heatmap.svg scripts/stats_cache.json
-          git diff --staged --quiet || git commit -m "chore: update GitHub stats, streak, and profile cards"
+          git add dark_mode.svg light_mode.svg contrib-heatmap.svg scripts/stats_cache.json README.md
+          git diff --staged --quiet || git commit -m "chore: auto-sync GitHub stats, streak, and profile cards"
           git push
+
