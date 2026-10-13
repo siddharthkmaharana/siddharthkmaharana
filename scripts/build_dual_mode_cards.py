@@ -10,9 +10,20 @@ matching Andrew6rant's layout down to the character:
 - Right: System neofetch card where EVERY single row is flush-right aligned
   at exactly column 60, with section breathing gaps at y=290 and y=430
   matching Andrew6rant's exact vertical rhythm.
+- GitHub Stats: Dynamically synced (Repos, Streak replacing Stars, Commits,
+  Followers, Lines of Code) fetched via fetch_github_stats.py with caching.
 """
 
+import os
+import sys
 import html
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(SCRIPT_DIR)
+if SCRIPT_DIR not in sys.path:
+    sys.path.insert(0, SCRIPT_DIR)
+
+from fetch_github_stats import get_live_stats
 
 # Full 25-row resampled portrait of Siddharth (complete head, hair, glasses, face, shoulders)
 ASCII_25_ROWS = [
@@ -72,7 +83,10 @@ def make_solid_rule(title, prefix="", suffix=""):
     dashes = "-" + "—" * (needed - 4) + "-—-"
     return f"{label}{dashes}"
 
-def make_svg(mode="dark"):
+def make_svg(mode="dark", stats=None):
+    if stats is None:
+        stats = get_live_stats("siddharthkmaharana")
+
     is_dark = (mode == "dark")
 
     bg_color = "#161b22" if is_dark else "#f6f8fa"
@@ -121,16 +135,57 @@ def make_svg(mode="dark"):
     contact_rule = make_solid_rule("Contact", prefix="- ", suffix=" ")
     stats_rule = make_solid_rule("GitHub Stats", prefix="- ", suffix=" ")
 
-    # Calculate dots for stats rows to hit exactly TOTAL_LEN (60)
-    # Repos row
-    repos_part = ". Repos: .... 19 {Contributed: 10+} | Stars:"
-    repos_dots_count = TOTAL_LEN - len(repos_part) - len(" 4")
-    repos_dots = " " + "." * (repos_dots_count - 2) + " "
+    # Dynamic GitHub stats values
+    repos_val = stats.get("repos", 20)
+    contrib_val = stats.get("contributed", "10+")
+    streak_val = stats.get("streak", 19)
+    commits_val = stats.get("commits", 534)
+    followers_val = stats.get("followers", 0)
+    loc_total_val = stats.get("loc_total", 185420)
+    loc_add_val = stats.get("loc_add", 165240)
+    loc_del_val = stats.get("loc_del", 20180)
 
-    # Commits row
-    commits_part = ". Commits: ................. 461 | Followers:"
-    commits_dots_count = TOTAL_LEN - len(commits_part) - len(" 5")
-    commits_dots = " " + "." * (commits_dots_count - 2) + " "
+    # 1. Repos & Streak row (Daily streak count replacing Stars, pipe '|' at col 36)
+    left_repos = ". Repos:"
+    contrib_suffix = f" {{Contributed: {contrib_val}}} | Streak:"
+    dots_r_count = 35 - len(left_repos) - len(str(repos_val)) - len(f" {{Contributed: {contrib_val}}}")
+    dots_r = " " + "." * max(1, dots_r_count - 2) + " "
+    row1_left = f"{left_repos}{dots_r}{repos_val}{contrib_suffix}"
+    dots_s_count = TOTAL_LEN - len(row1_left) - len(str(streak_val))
+    dots_s = " " + "." * max(1, dots_s_count - 2) + " "
+    row1_markup = (
+        f'<tspan class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc">{dots_r}</tspan>'
+        f'<tspan class="value">{repos_val}</tspan> {{<tspan class="key">Contributed</tspan>: '
+        f'<tspan class="value">{contrib_val}</tspan>}} | <tspan class="key">Streak</tspan>:'
+        f'<tspan class="cc">{dots_s}</tspan><tspan class="value">{streak_val}</tspan>'
+    )
+
+    # 2. Commits & Followers row (pipe '|' at col 36)
+    left_commits = ". Commits:"
+    dots_c_count = 35 - len(left_commits) - len(str(commits_val))
+    dots_c = " " + "." * max(1, dots_c_count - 2) + " "
+    row2_left = f"{left_commits}{dots_c}{commits_val} | Followers:"
+    dots_f_count = TOTAL_LEN - len(row2_left) - len(str(followers_val))
+    dots_f = " " + "." * max(1, dots_f_count - 2) + " "
+    row2_markup = (
+        f'<tspan class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc">{dots_c}</tspan>'
+        f'<tspan class="value">{commits_val}</tspan> | <tspan class="key">Followers</tspan>:'
+        f'<tspan class="cc">{dots_f}</tspan><tspan class="value">{followers_val}</tspan>'
+    )
+
+    # 3. Lines of Code row (ends at col 60)
+    loc_key = ". Lines of Code on GitHub:"
+    loc_str = f"{loc_total_val:,}"
+    add_str = f"{loc_add_val:,}"
+    del_str = f"{loc_del_val:,}"
+    paren_part = f" ( {add_str}++,  {del_str}-- )"
+    dots_loc_count = TOTAL_LEN - len(loc_key) - len(loc_str) - len(paren_part)
+    dots_loc = "." * max(0, dots_loc_count - 1) + " "
+    row3_markup = (
+        f'<tspan class="cc">. </tspan><tspan class="key">Lines of Code on GitHub</tspan>:'
+        f'<tspan class="cc">{dots_loc}</tspan><tspan class="value">{loc_str}</tspan> '
+        f'( <tspan class="addColor">{add_str}++</tspan>,  <tspan class="delColor">{del_str}--</tspan> )'
+    )
 
     info_lines = [
         # System Info block (y=30 to y=130)
@@ -160,9 +215,9 @@ def make_svg(mode="dark"):
         # y=430 is an EMPTY gap (creates clean breathing room above GitHub Stats, matching Andrew6rant)
         # GitHub Stats block (y=450 to y=510)
         (450, f'<tspan x="390" y="450">{stats_rule[:len("- GitHub Stats")]}</tspan> {stats_rule[len("- GitHub Stats")+1:]}'),
-        (470, f'<tspan x="390" y="470"><tspan class="cc">. </tspan><tspan class="key">Repos</tspan>:<tspan class="cc"> .... </tspan><tspan class="value">19</tspan> {{<tspan class="key">Contributed</tspan>: <tspan class="value">10+</tspan>}} | <tspan class="key">Stars</tspan>:<tspan class="cc">{repos_dots}</tspan><tspan class="value">4</tspan></tspan>'),
-        (490, f'<tspan x="390" y="490"><tspan class="cc">. </tspan><tspan class="key">Commits</tspan>:<tspan class="cc"> ................. </tspan><tspan class="value">461</tspan> | <tspan class="key">Followers</tspan>:<tspan class="cc">{commits_dots}</tspan><tspan class="value">5</tspan></tspan>'),
-        (510, f'<tspan x="390" y="510"><tspan class="cc">. </tspan><tspan class="key">Lines of Code on GitHub</tspan>:<tspan class="cc">. </tspan><tspan class="value">185,420</tspan> ( <tspan class="addColor">165,240++</tspan>,  <tspan class="delColor">20,180--</tspan> )</tspan>')
+        (470, f'<tspan x="390" y="470">{row1_markup}</tspan>'),
+        (490, f'<tspan x="390" y="490">{row2_markup}</tspan>'),
+        (510, f'<tspan x="390" y="510">{row3_markup}</tspan>')
     ]
 
     info_tspans_str = "\n".join(line[1] for line in info_lines)
@@ -197,15 +252,20 @@ text, tspan {{white-space: pre;}}
     return svg
 
 def run():
-    dark_svg = make_svg("dark")
-    with open("dark_mode.svg", "w", encoding="utf-8") as f:
-        f.write(dark_svg)
-    print("Wrote dark_mode.svg")
+    stats = get_live_stats("siddharthkmaharana")
+    print(f"[build_dual_mode_cards] Generating cards with stats: Repos={stats.get('repos')}, Streak={stats.get('streak')}, Commits={stats.get('commits')}, Followers={stats.get('followers')}")
 
-    light_svg = make_svg("light")
-    with open("light_mode.svg", "w", encoding="utf-8") as f:
+    dark_svg = make_svg("dark", stats=stats)
+    dark_path = os.path.join(REPO_ROOT, "dark_mode.svg")
+    with open(dark_path, "w", encoding="utf-8") as f:
+        f.write(dark_svg)
+    print(f"Wrote {dark_path}")
+
+    light_svg = make_svg("light", stats=stats)
+    light_path = os.path.join(REPO_ROOT, "light_mode.svg")
+    with open(light_path, "w", encoding="utf-8") as f:
         f.write(light_svg)
-    print("Wrote light_mode.svg")
+    print(f"Wrote {light_path}")
 
 if __name__ == "__main__":
     run()

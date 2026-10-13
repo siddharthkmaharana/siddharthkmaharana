@@ -26,10 +26,15 @@ jobs:
       - name: Regenerate contribution heatmap
         run: python scripts/generate_streak_svg.py siddharthkmaharana contrib-heatmap.svg
 
+      - name: Update GitHub stats and dual-mode profile cards
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python scripts/build_dual_mode_cards.py
+
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add contrib-heatmap.svg
-          git diff --staged --quiet || git commit -m "chore: refresh contribution heatmap"
+          git add dark_mode.svg light_mode.svg contrib-heatmap.svg scripts/stats_cache.json
+          git diff --staged --quiet || git commit -m "chore: update GitHub stats, streak, and profile cards"
           git push
