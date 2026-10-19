@@ -179,15 +179,20 @@ def make_svg(mode="dark", stats=None):
     )
 
     # 3. Lines of Code row (ends at col 60)
-    loc_key = ". Lines of Code on GitHub:"
+    loc_key = ". Lines of Code:"
     loc_str = f"{loc_total_val:,}"
     add_str = f"{loc_add_val:,}"
     del_str = f"{loc_del_val:,}"
     paren_part = f" ( {add_str}++,  {del_str}-- )"
     dots_loc_count = TOTAL_LEN - len(loc_key) - len(loc_str) - len(paren_part)
-    dots_loc = "." * max(0, dots_loc_count - 1) + " "
+    if dots_loc_count >= 3:
+        dots_loc = " " + "." * (dots_loc_count - 2) + " "
+    elif dots_loc_count == 2:
+        dots_loc = "  "
+    else:
+        dots_loc = " "
     row3_markup = (
-        f'<tspan class="cc">. </tspan><tspan class="key">Lines of Code on GitHub</tspan>:'
+        f'<tspan class="cc">. </tspan><tspan class="key">Lines of Code</tspan>:'
         f'<tspan class="cc">{dots_loc}</tspan><tspan class="value">{loc_str}</tspan> '
         f'( <tspan class="addColor">{add_str}++</tspan>,  <tspan class="delColor">{del_str}--</tspan> )'
     )

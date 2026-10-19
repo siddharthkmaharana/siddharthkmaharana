@@ -27,13 +27,13 @@ DEFAULT_STATS = {
     "username": "siddharthkmaharana",
     "repos": 20,
     "contributed": "10+",
-    "streak": 19,
-    "commits": 534,
+    "streak": 25,
+    "commits": 551,
     "followers": 0,
-    "loc_total": 185420,
-    "loc_add": 165240,
-    "loc_del": 20180,
-    "last_updated": "2026-10-13T00:00:00Z"
+    "loc_total": 3283733,
+    "loc_add": 1407982,
+    "loc_del": 1875751,
+    "last_updated": "2026-10-19T11:54:29Z"
 }
 
 
