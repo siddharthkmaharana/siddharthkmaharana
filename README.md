@@ -6,9 +6,9 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/dark_mode.svg?v=1793016449">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/light_mode.svg?v=1793016449">
-  <img alt="Siddharth Kumar Maharana's Profile" src="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/dark_mode.svg?v=1793016449" />
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/dark_mode.svg?v=1793052757">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/light_mode.svg?v=1793052757">
+  <img alt="Siddharth Kumar Maharana's Profile" src="https://raw.githubusercontent.com/siddharthkmaharana/siddharthkmaharana/main/dark_mode.svg?v=1793052757" />
 </picture>
 
 <!-- animated contribution snake: eats real GitHub commits, auto-refreshed daily via snake.yml -->
